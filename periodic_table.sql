@@ -57,6 +57,28 @@ CREATE TABLE public.elements (
 ALTER TABLE public.elements OWNER TO freecodecamp;
 
 --
+-- Name: elements_atomic_number_seq; Type: SEQUENCE; Schema: public; Owner: freecodecamp
+--
+
+CREATE SEQUENCE public.elements_atomic_number_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.elements_atomic_number_seq OWNER TO freecodecamp;
+
+--
+-- Name: elements_atomic_number_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: freecodecamp
+--
+
+ALTER SEQUENCE public.elements_atomic_number_seq OWNED BY public.elements.atomic_number;
+
+
+--
 -- Name: properties; Type: TABLE; Schema: public; Owner: freecodecamp
 --
 
@@ -106,6 +128,13 @@ ALTER SEQUENCE public.types_type_id_seq OWNED BY public.types.type_id;
 
 
 --
+-- Name: elements atomic_number; Type: DEFAULT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.elements ALTER COLUMN atomic_number SET DEFAULT nextval('public.elements_atomic_number_seq'::regclass);
+
+
+--
 -- Name: types type_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
 --
 
@@ -134,8 +163,8 @@ INSERT INTO public.elements VALUES (10, 'Ne', 'Neon');
 
 INSERT INTO public.properties VALUES (1, 1.008, -259.1, -252.9, 1);
 INSERT INTO public.properties VALUES (2, 4.003, -272.2, -269, 1);
-INSERT INTO public.properties VALUES (3, 6.94, 180.54, 1342, 1);
-INSERT INTO public.properties VALUES (4, 9.012, 1287, 2470, 1);
+INSERT INTO public.properties VALUES (3, 6.94, 180.54, 1342, 2);
+INSERT INTO public.properties VALUES (4, 9.012, 1287, 2470, 2);
 INSERT INTO public.properties VALUES (5, 10.81, 2075, 4000, 1);
 INSERT INTO public.properties VALUES (6, 12.011, 3550, 4027, 1);
 INSERT INTO public.properties VALUES (7, 14.007, -210.1, -195.8, 1);
@@ -154,18 +183,25 @@ INSERT INTO public.types VALUES (3, 'metalloid');
 
 
 --
+-- Name: elements_atomic_number_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
+--
+
+SELECT pg_catalog.setval('public.elements_atomic_number_seq', 1, false);
+
+
+--
 -- Name: types_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
-SELECT pg_catalog.setval('public.types_type_id_seq', 3, true);
+SELECT pg_catalog.setval('public.types_type_id_seq', 1, false);
 
 
 --
--- Name: elements elements_atomic_number_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+-- Name: elements elements_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
 ALTER TABLE ONLY public.elements
-    ADD CONSTRAINT elements_atomic_number_key UNIQUE (atomic_number);
+    ADD CONSTRAINT elements_name_key UNIQUE (name);
 
 
 --
@@ -177,35 +213,11 @@ ALTER TABLE ONLY public.elements
 
 
 --
--- Name: elements name_unique; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+-- Name: elements elements_symbol_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
 ALTER TABLE ONLY public.elements
-    ADD CONSTRAINT name_unique UNIQUE (name);
-
-
---
--- Name: properties properties_atomic_number_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
---
-
-ALTER TABLE ONLY public.properties
-    ADD CONSTRAINT properties_atomic_number_key UNIQUE (atomic_number);
-
-
---
--- Name: properties properties_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
---
-
-ALTER TABLE ONLY public.properties
-    ADD CONSTRAINT properties_pkey PRIMARY KEY (atomic_number);
-
-
---
--- Name: elements symbol_unique; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
---
-
-ALTER TABLE ONLY public.elements
-    ADD CONSTRAINT symbol_unique UNIQUE (symbol);
+    ADD CONSTRAINT elements_symbol_key UNIQUE (symbol);
 
 
 --
@@ -214,6 +226,14 @@ ALTER TABLE ONLY public.elements
 
 ALTER TABLE ONLY public.types
     ADD CONSTRAINT types_pkey PRIMARY KEY (type_id);
+
+
+--
+-- Name: types types_type_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.types
+    ADD CONSTRAINT types_type_key UNIQUE (type);
 
 
 --
